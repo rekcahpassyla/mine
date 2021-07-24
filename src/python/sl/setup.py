@@ -30,7 +30,7 @@ alcygos = Extension(
 )
 
 setup(
-    name='comp0078',
+    name='stuff',
     version='1.0.0',
     ext_modules=cythonize([percytron, alcygos])
 )
