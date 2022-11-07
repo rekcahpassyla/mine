@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def get_stats(file):
-    # loading stats for algorithms
+    # loading stats for leetcode
     store = pd.HDFStore(file, 'r')
     convergence = store['convergence']
     errors = {}

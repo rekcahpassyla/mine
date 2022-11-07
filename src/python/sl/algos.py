@@ -1,4 +1,4 @@
-# Holds all the algorithms for part 2
+# Holds all the leetcode for part 2
 # perceptron, winnow,, least squares, 1-nn
 # format of all is that they will take a sequence of points
 # and return a callable that can evaluate other points

@@ -1,0 +1,47 @@
+import init
+
+def indexToBlock(i, j):
+    indexOfBlock = (i/3)*3 + j/3
+    indexInBlock = (i%3)*3 + j%3
+    return  (indexOfBlock, indexInBlock)
+
+def blockToIndex(blockIndex, indexInBlock):
+    # blockIndex/3 gives initial vertical displacement: which multiple of 3
+    # indexInBlock/3 gives additional displacement
+    i = 3*(blockIndex/3) + indexInBlock/3
+    # blockIndex%3 gives initial horizontal displacement
+    # indexInBlock%3 gives additional displacement
+    j = 3*(blockIndex%3) + indexInBlock%3
+    return (i,j)
+
+
+
+# returns true if horiz[i][j] is the only place that this item can go
+# we assume that this is a partially filled grid
+# so we do not need to check for horizontal, vertical, block etc. 
+def isOnlyCell (i, j, item):
+    x,y = indexToBlock (i,j)
+    # test all of the squares in the block
+    # if this item was in any of the other squares,
+    # would it invalidate?
+    value = True
+    # first of all, has to be blank
+    value = value and (init.horiz[i][j] == '.')
+    # must be not already in the horizontal 
+    value = value and item not in init.horiz[i]
+    # must be not already in the vertical
+    value = value and item not in init.vert[j]
+    # if the item can't be in any of the blanks,
+    # this function must return true. 
+    if value == False: return value
+    for t in range (0, init.size):
+        if init.block[x][t] == '.': # a blank
+            i2, j2 = blockToIndex (x,t)
+            value = value and item not in init.horiz[i2]
+            value = value and item not in init.vert[j2]
+            if value == False: return value
+    return value        
+
+    
+    
+    

@@ -1,0 +1,12 @@
+s = set([0])
+
+l = list(s)
+
+value = False
+
+print l
+print s
+print value
+
+    
+

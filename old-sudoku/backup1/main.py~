@@ -1,0 +1,108 @@
+import init
+import utils
+
+passes = 3
+
+# variables are in: init.horiz, init.vert, init.block
+
+# create a data structure which maps coordinate pairs to possible values.
+
+possible=[[set([str(x) for x in range(1,init.size+1)]) for x in range(0, init.size)] for x in range(0, init.size)]
+
+# easier to check each 3x3 block. 
+# first round of elimination takes out all the obvious 
+
+for x in range (0, init.size):
+    # before doing anything else remove all the items
+    # from the possible vector which are already in this block
+    inThisBlock = set(init.block[x])
+    for y in range (0, init.size):
+        # iterate over each block.
+        
+        item = init.block[x][y]
+        print "Checking block ",x," index ",y," value=",item
+        i,j = utils.blockToIndex (x,y)
+        if item == '.':
+            # we don't know what goes here
+            
+            
+            print "Possible values are ",possible[i][j]
+            print "horizontal values are ",init.horiz[i]
+            print "vertical values are ", init.vert[i]
+            possible[i][j] = possible[i][j] - inThisBlock
+            print "After checking for this block: ",possible[i][j]
+            possible[i][j] = possible[i][j] - set(init.horiz[i])
+            print "After checking for horizontal values: ",possible[i][j]
+            possible[i][j] = possible[i][j] - set(init.vert[j])
+            print "After checking for vertical values: ",possible[i][j]
+
+            if len(possible[i][j]) == 1:
+                init.horiz[i][j] = list(possible[i][j])[0]
+                possible[i][j] = set([])
+                
+        else:
+            possible[i][j] = set([])
+
+print "Beginning more passes"
+
+for t in range (0, passes):
+    for i in range (0, len(init.horiz)):
+        for j in range (0, len (init.horiz)):
+            x,y = utils.indexToBlock (i,j)
+            print "index[",i,",",j,"] maps to block ",x,", index ",y
+            print "[",i,",",j,"] Possible values are ",possible[i][j]
+            print "horizontal values are ",init.horiz[i]
+            print "vertical values are ",init.vert[j]
+            print "block values are ", init.block[x]
+        
+            possible[i][j] = possible[i][j] - set(init.horiz[i])
+            #print "[",i,",",j,"] After filtering, possible values are ",possible[i][j]    
+            if len(possible[i][j]) == 1:
+                item = list(possible[i][j])[0]
+                init.horiz[i][j] = item
+                init.vert[j][i] = item
+                init.block[x][y] = item
+                possible[i][j] = set([])
+                
+            possible[i][j] = possible[i][j] - set(init.vert[j])
+            if len(possible[i][j]) == 1:
+                item = list(possible[i][j])[0]
+                init.horiz[i][j] = item
+                init.vert[j][i] = item
+                init.block[x][y] = item
+                possible[i][j] = set([])
+
+            print init.block[x]
+            possible[i][j] = possible[i][j] - set(init.block[x])
+            if len(possible[i][j]) == 1:
+                item = list(possible[i][j])[0]
+                init.horiz[i][j] = item
+                init.vert[j][i] = item
+                init.block[x][y] = item
+                possible[i][j] = set([])
+                
+
+            if utils.isOnlyCell (i,j,item):
+                item = list(possible[i][j])[0]
+                init.horiz[i][j] = item
+                init.vert[j][i] = item
+                init.block[x][y] = item
+                possible[i][j] = set([])
+
+
+def format (listOfLists):
+    for i in range (0, init.size):
+        for j in range (0, init.size):
+            print listOfLists[i][j],
+        print "i=",i
+
+format (possible)
+format (init.horiz)
+
+
+            
+            
+            
+
+
+
