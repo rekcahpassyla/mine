@@ -135,13 +135,36 @@ class LR(Algo):
 
 
 def onenn_(ypred, working, testxs, trainxs, trainys, nsims, m, n, t):
+    # ypred: the intended output, nsims by m 
+    # working: a preallocated working array used to store intermediate information
+    #          nsims by m by 2^n
+    # testxs: x test values, inputs that should result in ypred
+    #         m by 2^n: same for each nsim
+    # trainxs: x training values
+    #          nsims by m by n
+    # trainyx: y training values (predictions)
+    # nsims: number of simulations
+    # m, n, t are parameters of the problem not relevant to the algorithm
+    # m: number of input samples
+    # n: dimension
+    # t: number of test items 
+    
     # equivalent of "cpdef void onenn" in alcygos.pyx
     # note no return value: trainys is modified in-place. 
     i = 0
     j = 0
     mini = -1
+    # note that the use of for loops here is deliberate-
+    # in practice, you would vectorise. This was done to make it easy to
+    # have a Python equivalent of the cython. 
+        
+    # each sim is independent of the others,
+    # so it can be used in a prange loop in the cython equivalent. 
     for nsim in range(nsims):
         # first calculate cdist
+        # loops over m, n, t are all also independent of the others
+        # so they can also be used in prange loops.
+        # cython is smart enough to know how to unpack these. 
         for i in range(m):
             for j in range(t):
                 working[nsim][i][j] = 0
