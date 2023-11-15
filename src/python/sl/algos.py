@@ -136,6 +136,7 @@ class LR(Algo):
 
 def onenn_(ypred, working, testxs, trainxs, trainys, nsims, m, n, t):
     # equivalent of "cpdef void onenn" in alcygos.pyx
+    # note no return value: trainys is modified in-place. 
     i = 0
     j = 0
     mini = -1
