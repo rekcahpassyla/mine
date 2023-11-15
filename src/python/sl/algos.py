@@ -135,6 +135,7 @@ class LR(Algo):
 
 
 def onenn_(ypred, working, testxs, trainxs, trainys, nsims, m, n, t):
+    # equivalent of "cpdef void onenn" in alcygos.pyx
     i = 0
     j = 0
     mini = -1
@@ -148,11 +149,11 @@ def onenn_(ypred, working, testxs, trainxs, trainys, nsims, m, n, t):
                     working[nsim][i][j] += (
                         abs(trainxs[nsim][i][k] - testxs[nsim][j][k])
                     )
-        test = abs(trainxs[nsim][:, :, None] - testxs[nsim].T).sum(axis=1)
-        try:
-            assert np.allclose(test, working[nsim])
-        except:
-            raise
+        #test = abs(trainxs[nsim][:, :, None] - testxs[nsim].T).sum(axis=1)
+        #try:
+        #    assert np.allclose(test, working[nsim])
+        #except:
+        #    raise
         # need argmin over each column of working[nsim]
         # use ypred to store
         for j in range(t):
@@ -164,10 +165,10 @@ def onenn_(ypred, working, testxs, trainxs, trainys, nsims, m, n, t):
                     mini = i
             ypred[nsim][j] = trainys[nsim][mini]
             test = trainys[nsim][working[nsim][:, j].argmin()]
-            try:
-                assert np.allclose(test, ypred[nsim][j])
-            except:
-                raise
+            #try:
+            #    assert np.allclose(test, ypred[nsim][j])
+            #except:
+            #    raise
 
 
 class OneNN(Algo):

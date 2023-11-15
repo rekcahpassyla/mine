@@ -17,9 +17,13 @@ TEST = "test"
 @cython.wraparound(False)
 cpdef void onenn(
         # nsims by m: for output
+        # pre-allocate in Python because easier than messing with malloc
+        # external calling code must declare this:
+        #  ypred = np.zeros((nsims, testys.size), dtype=np.int8)
         np.ndarray[np.int8_t, ndim=2] ypred,
         # nsims by m by 2^n: for doing cdist of each sum
-        # pre-allocate in Python because easier than messing with malloc
+        # similarly, external calling code must declare this: 
+        # working = np.zeros((batchsize, m, t), dtype=np.int8)
         np.ndarray[np.int8_t, ndim=3] working,
         # m by 2^n: same for each nsim
         np.ndarray[np.int8_t, ndim=2] testxs,
